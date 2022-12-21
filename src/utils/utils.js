@@ -1,49 +1,56 @@
 import dayjs from 'dayjs';
+import { require } from 'dayjs';
+
 
 const DATE_FORMAT = 'D MMMM';
 
-function getRandomArrayElement(items) {
-  return items[Math.floor(Math.random() * items.length)];
-}
+const getRandomInteger = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
+};
 
-function getRandomArrayNumbers(min, max = 5) {
+const getRandomArrayElement = (items) => items[Math.floor(Math.random() * items.length)];
+
+const getRandomArrayNumbers = (min, max = 5) => {
   const count = getRandomInteger(min, max);
   const arr = new Set();
   for (let i = 0; i < count; i++) {
     arr.add(getRandomInteger(1, 10));
   }
   return Array.from(arr);
-}
+};
 
 const getRandomDate = () => dayjs()
-  .add(getRandomInteger(1, 50), 'year')
-  .add(getRandomInteger(1, 30), 'day')
-  .add(getRandomInteger(1, 23), 'hour');
+  .add(getRandomInteger(-2, -20), 'year')
+  .add(getRandomInteger(-1, -30), 'day')
+  .add(getRandomInteger(-1, -23), 'hour').format('YYYY');
 
-function getRandomInteger(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
-}
+const getDurationTime = () => {
+  const duration = require('dayjs/plugin/duration');
+  dayjs.extend(duration);
 
-function humanizeTaskDueDate(dueDate) {
-  return dueDate ? dayjs(dueDate).format(DATE_FORMAT) : '';
-}
+  const time = dayjs.duration(getRandomInteger(40, 180), 'minute');
 
-function isTaskExpired(dueDate) {
-  return dueDate && dayjs().isAfter(dueDate, 'D');
-}
+  if (time.asHours() > 1) {
+    return time.format('H[h] mm[m]');
+  }
 
-function isTaskRepeating(repeating) {
-  return Object.values(repeating).some(Boolean);
-}
+  return time.format('mm[m]');
+};
 
-function getRandomFloat(min, max) {
+const humanizeTaskDueDate = (dueDate) => dueDate ? dayjs(dueDate).format(DATE_FORMAT) : '';
+
+const isTaskExpired = (dueDate) => dueDate && dayjs().isAfter(dueDate, 'D');
+
+const isTaskRepeating = (repeating) => Object.values(repeating).some(Boolean);
+
+const getRandomFloat = (min, max) => {
   const num = Math.random() * (max - min) + min;
   return num.toFixed(1);
-}
+};
 
 export {
   getRandomArrayElement, humanizeTaskDueDate, isTaskExpired, isTaskRepeating,
-  getRandomInteger, getRandomArrayNumbers, getRandomDate, getRandomFloat
+  getRandomInteger, getRandomArrayNumbers, getRandomDate, getRandomFloat, getDurationTime
 };
