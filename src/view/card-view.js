@@ -3,8 +3,8 @@ import { createElement } from '../render.js';
 function createCardTemplate(movie) {
 
 
-  const { id, comments, film_info: { title, poster, release, duration, genre, description }, favorite } = movie;
-
+  const { id, comments, film_info: { title, poster, release, duration, genre, description, }, user_details: {
+    watchlist, favorite } } = movie;
 
   return (`<article id=${id} class="film-card">
             <a class="film-card__link">
@@ -26,13 +26,15 @@ function createCardTemplate(movie) {
         </a>
         <div class="film-card__controls">
           <button
-            class="film-card__controls-item film-card__controls-item--add-to-watchlist"
+            class="film-card__controls-item film-card__controls-item--add-to-watchlist
+            ${watchlist ? 'film-card__controls-item--active' : ''}"
             type="button"
           >
             Add to watchlist
           </button>
           <button
-            class="film-card__controls-item film-card__controls-item--mark-as-watched"
+            class="film-card__controls-item film-card__controls-item--mark-as-watched
+            ${movie.user_details.already_watched ? 'film-card__controls-item--active' : ''}"
             type="button"
           >
             Mark as watched
@@ -59,7 +61,7 @@ export default class CardView {
     return createCardTemplate(this.movie);
   }
 
-  getElement() {
+  get element() {
     if (!this.element) {
       this.element = createElement(this.getTemplate());
     }

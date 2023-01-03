@@ -1,12 +1,17 @@
 import { createElement } from '../render.js';
 
-function createFilmsTemplate() {
-  return '<section class="films"></section>';
+
+function createExtraFilmsTemplate() {
+  return `<section class="films-list films-list--extra">
+  <h2 class="films-list__title">Top rated</h2>
+</section>`;
 }
 
-export default class FilmsView {
+export default class ExtraFilmsView {
+
+
   getTemplate() {
-    return createFilmsTemplate();
+    return createExtraFilmsTemplate();
   }
 
   getElement() {
