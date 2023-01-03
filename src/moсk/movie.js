@@ -1,4 +1,4 @@
-import { TITLES, POSTERS, NAMES, COUNTRYS, GENRES, DESCRIPTIONS, AGES } from '../const.js';
+import { TITLES, POSTERS, NAMES, COUNTRIES, GENRES, DESCRIPTIONS, AGES } from '../const.js';
 import {
   getRandomArrayElement, getRandomInteger, getRandomArrayNumbers,
   getRandomFloat, getRandomDate, getDurationTime
@@ -21,7 +21,7 @@ const getMovie = (index) => {
       'actors': NAMES.slice(1, getRandomInteger(1, 3)),
       'release': {
         'date': getRandomDate(),
-        'release_country': getRandomArrayElement(COUNTRYS)
+        'release_country': getRandomArrayElement(COUNTRIES)
       },
       'duration': getDurationTime(),
       'genre': getRandomArrayElement(GENRES),

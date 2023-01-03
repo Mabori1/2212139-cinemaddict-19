@@ -9,32 +9,38 @@ import PopupView from '../view/popup-view.js';
 
 
 export default class BoardPresenter {
-  boardComponent = new BoardView();
-  filmsListComponent = new FilmsListView();
+  #boardContainer = null;
+  #moviesModel = null;
+  #commentsModel = null;
+  #boardMovies = null;
+  #commentsMovies = null;
+
+  #boardComponent = new BoardView();
+  #filmsListComponent = new FilmsListView();
   #filmsContainerComponent = new FilmsContainerView();
-  filmsContainerComponent2 = new FilmsContainerView();
-  extraListComponent = new ExtraFilmsView();
+  #extraListComponent = new ExtraFilmsView();
   #mainBody = null;
 
   constructor({ boardContainer, bodyElement, moviesModel, commentsModel }) {
-    this.boardContainer = boardContainer;
-    this.moviesModel = moviesModel;
-    this.commentsModel = commentsModel;
+    this.#boardContainer = boardContainer;
+    this.#moviesModel = moviesModel;
+    this.#commentsModel = commentsModel;
     this.#mainBody = bodyElement;
   }
 
   init() {
-    this.boardMovies = [...this.moviesModel.get()];
-    this.commentsMovies = [...this.commentsModel.get()];
 
-    render(this.boardComponent, this.boardContainer);
-    render(this.filmsListComponent, this.boardComponent.getElement());
-    render(this.filmsContainerComponent, this.filmsListComponent.getElement());
+    this.#boardMovies = [...this.#moviesModel.movies];
+    this.#commentsMovies = [...this.#commentsModel.comments];
 
-    for (let i = 0; i < this.boardMovies.length; i++) {
-      this.#renderCards(this.boardMovies[i]);
+    render(this.#boardComponent, this.#boardContainer);
+    render(this.#filmsListComponent, this.#boardComponent.element);
+    render(this.#filmsContainerComponent, this.#filmsListComponent.element);
+
+    for (let i = 0; i < this.#boardMovies.length; i++) {
+      this.#renderCards(this.#boardMovies[i]);
     }
-    render(new ShowMoreButtonView(), this.filmsContainerComponent.getElement());
+    render(new ShowMoreButtonView(), this.#filmsContainerComponent.element);
   }
 
   #renderCards(card) {
@@ -50,6 +56,7 @@ export default class BoardPresenter {
     const closedPopupDetails = () => {
       this.#mainBody.classList.remove('hide-overflow');
       this.#mainBody.removeChild(popupComponent.element);
+
     };
 
     const onEscKeyClosed = (evt) => {
@@ -69,6 +76,7 @@ export default class BoardPresenter {
 
     popupComponent.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
       closedPopupDetails();
+      document.removeEventListener('keydown', onEscKeyClosed);
     });
 
   }

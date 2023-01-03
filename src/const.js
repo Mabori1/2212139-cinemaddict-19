@@ -18,8 +18,8 @@ const NAMES = ['Clementine Bauch', 'Leanne Graham', 'Ervin Howell', 'Patricia Le
 
 const TITLES = ['A Little Pony Without The Carpet', 'Laziness Who Sold Themselves', 'nipsum est rem est fugit velit sequi', 'neum odio dolores dolor totam', 'noccaecati ratione eius rem velit', 'fuga eos qui dolor rerum', 'ninventore corporis exercitationem', 'ncorporis cupiditate et deserunt recusandae est sed quis culpa', 'neum maiores corporis et', 'vel quae voluptas qui exercitationem', 'nvoluptatibus unde sed\nminima et qui ipsam aspernatur'];
 
-const COUNTRYS = ['Finland', 'USA', 'Germany', 'France', 'Russia', 'Nord Korea'];
+const COUNTRIES = ['Finland', 'USA', 'Germany', 'France', 'Russia', 'Nord Korea'];
 const GENRES = ['Uzas', 'Comedy', 'Drama', 'Fantasy', 'Historical', 'Horror', 'Musical', 'Romance'];
 const AGES = ['0+', '6+', '12+', '18+'];
 
-export { EMOTIONS, DESCRIPTIONS, POSTERS, NAMES, COMMENTS, TITLES, COUNTRYS, GENRES, AGES };
+export { EMOTIONS, DESCRIPTIONS, POSTERS, NAMES, COMMENTS, TITLES, COUNTRIES, GENRES, AGES };

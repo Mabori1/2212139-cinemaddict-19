@@ -12,7 +12,12 @@ const headerElement = document.querySelector('.header');
 const bodyElement = document.body;
 const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
-const boardPresenter = new BoardPresenter({ boardContainer: siteMainElement, bodyElement, moviesModel, commentsModel });
+const boardPresenter = new BoardPresenter({
+  boardContainer: siteMainElement,
+  bodyElement,
+  moviesModel,
+  commentsModel
+});
 
 
 render(new ProfileView(), headerElement);
