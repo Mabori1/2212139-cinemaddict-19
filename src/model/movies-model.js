@@ -1,6 +1,6 @@
 import { getMovie } from '../moсk/movie.js';
 
-const MOVIE_COUNT = 5;
+const MOVIE_COUNT = 50;
 
 
 export default class MoviesModel {

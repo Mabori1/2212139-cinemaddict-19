@@ -6,14 +6,20 @@ import CardView from '../view/card-view.js';
 import { render } from '../render.js';
 import ExtraFilmsView from '../view/extra-list-view.js';
 import PopupView from '../view/popup-view.js';
+import SortView from '../view/sort-view.js';
+import EmptyView from '../view/empty-list.js';
 
+const MOVIE_COUNT_PER_STEP = 5;
 
 export default class BoardPresenter {
+
+  #renderedMovieCount = MOVIE_COUNT_PER_STEP;
   #boardContainer = null;
   #moviesModel = null;
   #commentsModel = null;
   #boardMovies = null;
   #commentsMovies = null;
+  #loadMoreButtonComponent = null;
 
   #boardComponent = new BoardView();
   #filmsListComponent = new FilmsListView();
@@ -33,15 +39,49 @@ export default class BoardPresenter {
     this.#boardMovies = [...this.#moviesModel.movies];
     this.#commentsMovies = [...this.#commentsModel.comments];
 
+    this.#renderBoard();
+  }
+
+  #loadMoreButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#boardMovies
+      .slice(this.#renderedMovieCount, this.#renderedMovieCount + MOVIE_COUNT_PER_STEP)
+      .forEach((card) => this.#renderCards(card));
+
+    this.#renderedMovieCount += MOVIE_COUNT_PER_STEP;
+
+    if (this.#renderedMovieCount >= this.#boardMovies.length) {
+      this.#loadMoreButtonComponent.element.remove();
+      this.#loadMoreButtonComponent.removeElement();
+    }
+  };
+
+
+  #renderBoard() {
     render(this.#boardComponent, this.#boardContainer);
+
+    if (!this.#boardMovies.length) {
+      render(new EmptyView(), this.#boardComponent.element);
+      return;
+    }
+
+    render(new SortView(), this.#boardComponent.element);
     render(this.#filmsListComponent, this.#boardComponent.element);
     render(this.#filmsContainerComponent, this.#filmsListComponent.element);
 
-    for (let i = 0; i < this.#boardMovies.length; i++) {
+    for (let i = 0; i < Math.min(this.#boardMovies.length, MOVIE_COUNT_PER_STEP); i++) {
       this.#renderCards(this.#boardMovies[i]);
     }
-    render(new ShowMoreButtonView(), this.#filmsContainerComponent.element);
+
+    if (this.#boardMovies.length > MOVIE_COUNT_PER_STEP) {
+      this.#loadMoreButtonComponent = new ShowMoreButtonView();
+      render(this.#loadMoreButtonComponent, this.#filmsListComponent.element);
+
+      this.#loadMoreButtonComponent.element
+        .addEventListener('click', this.#loadMoreButtonClickHandler);
+    }
   }
+
 
   #renderCards(card) {
 
@@ -81,5 +121,4 @@ export default class BoardPresenter {
 
   }
 }
-
 
