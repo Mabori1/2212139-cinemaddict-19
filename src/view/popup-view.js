@@ -82,14 +82,24 @@ function createPopupTemplate(movie) {
 export default class PopupView extends AbstractView {
 
   #movie = null;
+  #handleCloseButtonClick = null;
 
-  constructor(movie) {
+  constructor({ card, onCloseButtonClick }) {
     super();
-    this.#movie = movie;
+    this.#movie = card;
+    this.#handleCloseButtonClick = onCloseButtonClick;
+
+    this.element.querySelector('.film-details__close-btn')
+      .addEventListener('click', this.#popupCloseHandler);
   }
 
   get template() {
     return createPopupTemplate(this.#movie);
   }
+
+  #popupCloseHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleCloseButtonClick();
+  };
 
 }

@@ -54,14 +54,23 @@ function createCardTemplate(movie) {
 export default class CardView extends AbstractView {
 
   #movie = null;
+  #handleOpenPopup = null;
 
-  constructor(movie) {
+  constructor({ card, onOpenPopup }) {
     super();
-    this.#movie = movie;
+    this.#movie = card;
+    this.#handleOpenPopup = onOpenPopup;
+
+    this.element.querySelector('.film-card__poster')
+      .addEventListener('click', this.#popupOpenHandler);
   }
 
   get template() {
     return createCardTemplate(this.#movie);
   }
 
+  #popupOpenHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleOpenPopup();
+  };
 }
