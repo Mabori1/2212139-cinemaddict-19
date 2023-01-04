@@ -1,6 +1,8 @@
 
 import { COMMENTS, EMOTIONS, NAMES } from '../const.js';
-import { getRandomArrayElement, getRandomDate } from '../utils/utils.js';
+import { getRandomArrayElement } from '../utils/common.js';
+import { getRandomDate } from '../utils/data.js';
+
 
 const getComment = (index) => {
 

@@ -1,25 +1,10 @@
 import dayjs from 'dayjs';
 import { require } from 'dayjs';
+import { getRandomInteger } from './common';
 
 
 const DATE_FORMAT = 'D MMMM';
 
-const getRandomInteger = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
-};
-
-const getRandomArrayElement = (items) => items[Math.floor(Math.random() * items.length)];
-
-const getRandomArrayNumbers = (min, max = 5) => {
-  const count = getRandomInteger(min, max);
-  const arr = new Set();
-  for (let i = 0; i < count; i++) {
-    arr.add(getRandomInteger(1, 10));
-  }
-  return Array.from(arr);
-};
 
 const getRandomDate = () => dayjs()
   .add(getRandomInteger(-2, -20), 'year')
@@ -45,12 +30,8 @@ const isTaskExpired = (dueDate) => dueDate && dayjs().isAfter(dueDate, 'D');
 
 const isTaskRepeating = (repeating) => Object.values(repeating).some(Boolean);
 
-const getRandomFloat = (min, max) => {
-  const num = Math.random() * (max - min) + min;
-  return num.toFixed(1);
-};
 
 export {
-  getRandomArrayElement, humanizeTaskDueDate, isTaskExpired, isTaskRepeating,
-  getRandomInteger, getRandomArrayNumbers, getRandomDate, getRandomFloat, getDurationTime
+  humanizeTaskDueDate, isTaskExpired, isTaskRepeating,
+  getRandomDate, getDurationTime
 };

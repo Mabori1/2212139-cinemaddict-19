@@ -1,8 +1,9 @@
 import { TITLES, POSTERS, NAMES, COUNTRIES, GENRES, DESCRIPTIONS, AGES } from '../const.js';
 import {
   getRandomArrayElement, getRandomInteger, getRandomArrayNumbers,
-  getRandomFloat, getRandomDate, getDurationTime
-} from '../utils/utils';
+  getRandomFloat
+} from '../utils/common.js';
+import { getRandomDate, getDurationTime } from '../utils/data.js';
 
 
 const getMovie = (index) => {
