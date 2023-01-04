@@ -3,7 +3,7 @@ import FilmsListView from '../view/films-list-view.js';
 import FilmsContainerView from '../view/films-container-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import CardView from '../view/card-view.js';
-import { render } from '../render.js';
+import { render } from '../framework/render.js';
 import ExtraFilmsView from '../view/extra-list-view.js';
 import PopupView from '../view/popup-view.js';
 import SortView from '../view/sort-view.js';
