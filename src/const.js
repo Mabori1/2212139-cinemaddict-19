@@ -22,4 +22,12 @@ const COUNTRIES = ['Finland', 'USA', 'Germany', 'France', 'Russia', 'Nord Korea'
 const GENRES = ['Uzas', 'Comedy', 'Drama', 'Fantasy', 'Historical', 'Horror', 'Musical', 'Romance'];
 const AGES = ['0+', '6+', '12+', '18+'];
 
-export { EMOTIONS, DESCRIPTIONS, POSTERS, NAMES, COMMENTS, TITLES, COUNTRIES, GENRES, AGES };
+const FilterType = {
+  ALL: 'all',
+  WATCHLIST: 'watchlist',
+  HISTORY: 'history',
+  FAVORITES: 'favorites'
+};
+
+
+export { EMOTIONS, DESCRIPTIONS, POSTERS, NAMES, COMMENTS, TITLES, COUNTRIES, GENRES, AGES, FilterType };
