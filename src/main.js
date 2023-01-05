@@ -16,7 +16,7 @@ const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
 const filters = generateFilter(moviesModel.movies);
 const boardPresenter = new BoardPresenter({
-  boardContainer: siteMainElement,
+  siteMainElement: siteMainElement,
   bodyElement,
   moviesModel,
   commentsModel
