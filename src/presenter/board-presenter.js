@@ -138,7 +138,9 @@ export default class BoardPresenter {
       onModeChange: this.#handleModeChange
     });
 
-    cardPresenter.init(card);
+    const comments = [...this.#commentsModel.comments];
+
+    cardPresenter.init(card, comments);
     this.#cardPresenterMap.set(card.id, cardPresenter);
   }
 

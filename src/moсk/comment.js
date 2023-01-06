@@ -1,7 +1,7 @@
 
 import { COMMENTS, EMOTIONS, NAMES } from '../const.js';
 import { getRandomArrayElement } from '../utils/common.js';
-import { getRandomDate } from '../utils/data.js';
+import { getRandomDateComment } from '../utils/data.js';
 
 
 const getComment = (index) => {
@@ -10,7 +10,7 @@ const getComment = (index) => {
     'id': index,
     'author': getRandomArrayElement(NAMES),
     'comment': getRandomArrayElement(COMMENTS),
-    'date': getRandomDate(),
+    'date': getRandomDateComment(),
     'emotion': getRandomArrayElement(EMOTIONS)
   };
   return comment;

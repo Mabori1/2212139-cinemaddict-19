@@ -11,6 +11,13 @@ const getRandomDate = () => dayjs()
   .add(getRandomInteger(-1, -30), 'day')
   .add(getRandomInteger(-1, -23), 'hour').format('YYYY');
 
+const getRandomDateComment = () => dayjs()
+  .add(getRandomInteger(-2, -20), 'year')
+  .add(getRandomInteger(-1, -30), 'day')
+  .add(getRandomInteger(-1, -23), 'hour')
+  .add(getRandomInteger(-1, -23), 'minute').format('YYYY/MM/DD HH:mm');
+
+
 const getDurationTime = () => {
   const duration = require('dayjs/plugin/duration');
   dayjs.extend(duration);
@@ -33,5 +40,5 @@ const isTaskRepeating = (repeating) => Object.values(repeating).some(Boolean);
 
 export {
   humanizeTaskDueDate, isTaskExpired, isTaskRepeating,
-  getRandomDate, getDurationTime
+  getRandomDate, getDurationTime, getRandomDateComment
 };
