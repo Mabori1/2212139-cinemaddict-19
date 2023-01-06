@@ -7,6 +7,8 @@ import SortView from '../view/sort-view.js';
 import EmptyView from '../view/empty-list.js';
 import CardPresenter from './card-presenter.js';
 import { updateItem } from '../utils/common.js';
+import { SortType } from '../const.js';
+import { sortDate, sortRating } from '../utils/sort.js';
 
 const MOVIE_COUNT_PER_STEP = 5;
 
@@ -22,10 +24,12 @@ export default class BoardPresenter {
   #filmsComponent = new BoardView();
   #filmsListComponent = new FilmsListView();
   #filmsContainerComponent = new FilmsContainerView();
-  #sortComponent = new SortView();
+  #sortComponent = null;
   #emptyViewComponent = new EmptyView();
   #mainBody = null;
   #cardPresenterMap = new Map();
+  #currentSortType = SortType.DEFAULT;
+  #sourcedBoardMovies = [];
 
   constructor({ siteMainElement, bodyElement, moviesModel, commentsModel }) {
     this.#siteMainComponent = siteMainElement;
@@ -37,6 +41,7 @@ export default class BoardPresenter {
   init() {
 
     this.#boardMovies = [...this.#moviesModel.movies];
+    this.#sourcedBoardMovies = [...this.#moviesModel.movies];
 
     this.#renderBoard();
   }
@@ -47,6 +52,7 @@ export default class BoardPresenter {
 
   #handleCardChange = (updatedCard) => {
     this.#boardMovies = updateItem(this.#boardMovies, updatedCard);
+    this.#sourcedBoardMovies = updateItem(this.#sourcedBoardMovies, updatedCard);
     this.#cardPresenterMap.get(updatedCard.id).init(updatedCard);
   };
 
@@ -67,7 +73,37 @@ export default class BoardPresenter {
       .forEach((card) => this.#renderCard(card));
   };
 
+  #sortMovies(sortType) {
+
+    switch (sortType) {
+      case SortType.DATE:
+        this.#boardMovies.sort(sortDate);
+        break;
+      case SortType.RATING:
+        this.#boardMovies.sort(sortRating);
+        break;
+      default:
+        this.#boardMovies = [...this.#sourcedBoardMovies];
+    }
+
+    this.#currentSortType = sortType;
+  }
+
+  #handleSortTypeChange = (sortType) => {
+
+    // - Сортируем задачи
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+    this.#sortMovies(sortType);
+    this.#clearCardList();
+    this.#renderMoviesList();
+  };
+
   #renderSort = () => {
+    this.#sortComponent = new SortView({
+      onSortTypeChange: this.#handleSortTypeChange
+    });
     render(this.#sortComponent, this.#filmsComponent.element);
   };
 

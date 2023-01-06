@@ -29,5 +29,10 @@ const FilterType = {
   FAVORITES: 'favorites'
 };
 
+const SortType = {
+  DEFAULT: 'default',
+  DATE: 'date',
+  RATING: 'rating',
+};
 
-export { EMOTIONS, DESCRIPTIONS, POSTERS, NAMES, COMMENTS, TITLES, COUNTRIES, GENRES, AGES, FilterType };
+export { EMOTIONS, DESCRIPTIONS, POSTERS, NAMES, COMMENTS, TITLES, COUNTRIES, GENRES, AGES, FilterType, SortType };
