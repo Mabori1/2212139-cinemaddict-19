@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import { TITLES, POSTERS, NAMES, COUNTRIES, GENRES, DESCRIPTIONS, AGES } from '../const.js';
 import {
   getRandomArrayElement, getRandomInteger, getRandomArrayNumbers,
@@ -6,32 +7,32 @@ import {
 import { getRandomDate, getDurationTime } from '../utils/data.js';
 
 
-const getMovie = (index) => {
+const getMovie = () => {
 
   const movie = {
-    'id': index,
+    'id': nanoid(),
     'comments': getRandomArrayNumbers(1, 4),
-    'film_info': {
+    'filmInfo': {
       'title': getRandomArrayElement(TITLES),
-      'alternative_title': getRandomArrayElement(TITLES),
-      'total_rating': getRandomFloat(3, 10),
+      'alternativeTitle': getRandomArrayElement(TITLES),
+      'totalRating': getRandomFloat(3, 10),
       'poster': `./images/posters/${getRandomArrayElement(POSTERS)}`,
-      'age_rating': getRandomArrayElement(AGES),
+      'ageRating': getRandomArrayElement(AGES),
       'director': getRandomArrayElement(NAMES),
       'writers': NAMES.slice(1, getRandomInteger(1, 3)),
       'actors': NAMES.slice(1, getRandomInteger(1, 3)),
       'release': {
         'date': getRandomDate(),
-        'release_country': getRandomArrayElement(COUNTRIES)
+        'releaseCountry': getRandomArrayElement(COUNTRIES)
       },
       'duration': getDurationTime(),
       'genre': getRandomArrayElement(GENRES),
       'description': getRandomArrayElement(DESCRIPTIONS)
     },
-    'user_details': {
+    'userDetails': {
       'watchlist': Boolean(getRandomInteger(0, 1)),
-      'already_watched': Boolean(getRandomInteger(0, 1)),
-      'watching_date': getRandomDate(),
+      'alreadyWatched': Boolean(getRandomInteger(0, 1)),
+      'watchingDate': getRandomDate(),
       'favorite': Boolean(getRandomInteger(0, 1))
     }
   };

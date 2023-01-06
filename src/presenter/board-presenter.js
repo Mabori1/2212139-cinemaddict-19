@@ -6,6 +6,7 @@ import { render, remove } from '../framework/render.js';
 import SortView from '../view/sort-view.js';
 import EmptyView from '../view/empty-list.js';
 import CardPresenter from './card-presenter.js';
+import { updateItem } from '../utils/common.js';
 
 const MOVIE_COUNT_PER_STEP = 5;
 
@@ -24,6 +25,7 @@ export default class BoardPresenter {
   #sortComponent = new SortView();
   #emptyViewComponent = new EmptyView();
   #mainBody = null;
+  #cardPresenterMap = new Map();
 
   constructor({ siteMainElement, bodyElement, moviesModel, commentsModel }) {
     this.siteMainComponent = siteMainElement;
@@ -38,6 +40,15 @@ export default class BoardPresenter {
 
     this.#renderBoard();
   }
+
+  #handleModeChange = () => {
+    this.#cardPresenterMap.forEach((presenter) => presenter.resetView());
+  };
+
+  #handleCardChange = (updatedCard) => {
+    this.#boardMovies = updateItem(this.#boardMovies, updatedCard);
+    this.#cardPresenterMap.get(updatedCard.id).init(updatedCard);
+  };
 
   #loadMoreButtonClickHandler = () => {
     this.#renderMovies(this.#renderedMovieCount, this.#renderedMovieCount + MOVIE_COUNT_PER_STEP);
@@ -86,10 +97,20 @@ export default class BoardPresenter {
 
     const cardPresenter = new CardPresenter({
       cardFilmContainer: this.#filmsContainerComponent,
-      mainBody: this.#mainBody
+      mainBody: this.#mainBody,
+      onDataChange: this.#handleCardChange,
+      onModeChange: this.#handleModeChange
     });
 
     cardPresenter.init(card);
+    this.#cardPresenterMap.set(card.id, cardPresenter);
+  }
+
+  #clearCardList() {
+    this.#cardPresenterMap.forEach((presenter) => presenter.destroy());
+    this.#cardPresenterMap.clear();
+    this.#renderedMovieCount = MOVIE_COUNT_PER_STEP;
+    remove(this.#loadMoreButtonComponent);
   }
 
   #renderBoard() {
