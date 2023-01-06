@@ -21,4 +21,6 @@ const getRandomFloat = (min, max) => {
   return num.toFixed(1);
 };
 
-export { getRandomArrayElement, getRandomInteger, getRandomArrayNumbers, getRandomFloat };
+const updateItem = (items, update) => items.map((item) => item.id === update.id ? update : item);
+
+export { getRandomArrayElement, getRandomInteger, getRandomArrayNumbers, getRandomFloat, updateItem };

@@ -2,8 +2,9 @@ import AbstractView from '../framework/view/abstract-view.js';
 
 function createPopupTemplate(movie) {
 
-  const { film_info: { title, poster, director, writers, actors, release, duration, genre, description },
-    user_details: { favorite } } = movie;
+  const { filmInfo: { title, poster, director, writers, actors, duration, genre,
+    description, ageRating, totalRating,
+    release: { date, releaseCountry } }, userDetails: { favorite, watchlist, alreadyWatched } } = movie;
 
   return `<section class="film-details">
   <div class="film-details__inner">
@@ -15,7 +16,7 @@ function createPopupTemplate(movie) {
         <div class="film-details__poster">
           <img class="film-details__poster-img" src=${poster} alt="">
 
-          <p class="film-details__age">${movie.film_info.age_rating}</p>
+          <p class="film-details__age">${ageRating}</p>
         </div>
 
         <div class="film-details__info">
@@ -26,7 +27,7 @@ function createPopupTemplate(movie) {
             </div>
 
             <div class="film-details__rating">
-              <p class="film-details__total-rating">${movie.film_info.total_rating}</p>
+              <p class="film-details__total-rating">${totalRating}</p>
             </div>
           </div>
 
@@ -45,7 +46,7 @@ function createPopupTemplate(movie) {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${release.date}</td>
+              <td class="film-details__cell">${date}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Duration</td>
@@ -53,7 +54,7 @@ function createPopupTemplate(movie) {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
-              <td class="film-details__cell">${release.release_country}</td>
+              <td class="film-details__cell">${releaseCountry}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Genres</td>
@@ -69,8 +70,8 @@ function createPopupTemplate(movie) {
       </div>
 
       <section class="film-details__controls">
-        <button type="button" class="film-details__control-button film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-        <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched" id="watched" name="watched">Already watched</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watchlist ${watchlist ? 'film-card__controls-item--active' : ''}" id="watchlist" name="watchlist">Add to watchlist</button>
+        <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched ${alreadyWatched ? 'film-card__controls-item--active' : ''}" id="watched" name="watched">Already watched</button>
         <button type="button" class="film-details__control-button film-details__control-button--favorite
         ${favorite ? 'film-card__controls-item--active' : ''}" id="favorite" name="favorite">Add to favorites</button>
       </section>
@@ -83,14 +84,30 @@ export default class PopupView extends AbstractView {
 
   #movie = null;
   #handleCloseButtonClick = null;
+  #handleFavoriteClick = null;
+  #handleWatchListClick = null;
+  #handleWatchedClick = null;
 
-  constructor({ card, onCloseButtonClick }) {
+
+  constructor({ card, onCloseButtonClick, onFavoriteClick, onWatchlistClick, onWatchedClick }) {
     super();
     this.#movie = card;
     this.#handleCloseButtonClick = onCloseButtonClick;
+    this.#handleFavoriteClick = onFavoriteClick;
+    this.#handleWatchListClick = onWatchlistClick;
+    this.#handleWatchedClick = onWatchedClick;
 
     this.element.querySelector('.film-details__close-btn')
       .addEventListener('click', this.#popupCloseHandler);
+
+    this.element.querySelector('#favorite')
+      .addEventListener('click', this.#favoriteClickHandler);
+
+    this.element.querySelector('#watchlist')
+      .addEventListener('click', this.#watchListClickHandler);
+
+    this.element.querySelector('#watched')
+      .addEventListener('click', this.#watchedClickHandler);
   }
 
   get template() {
@@ -100,6 +117,21 @@ export default class PopupView extends AbstractView {
   #popupCloseHandler = (evt) => {
     evt.preventDefault();
     this.#handleCloseButtonClick();
+  };
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFavoriteClick();
+  };
+
+  #watchListClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleWatchListClick();
+  };
+
+  #watchedClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleWatchedClick();
   };
 
 }

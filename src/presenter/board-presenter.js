@@ -13,7 +13,7 @@ const MOVIE_COUNT_PER_STEP = 5;
 export default class BoardPresenter {
 
   #renderedMovieCount = MOVIE_COUNT_PER_STEP;
-  siteMainComponent = null;
+  #siteMainComponent = null;
   #moviesModel = null;
   #commentsModel = null;
   #boardMovies = null;
@@ -28,7 +28,7 @@ export default class BoardPresenter {
   #cardPresenterMap = new Map();
 
   constructor({ siteMainElement, bodyElement, moviesModel, commentsModel }) {
-    this.siteMainComponent = siteMainElement;
+    this.#siteMainComponent = siteMainElement;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
     this.#mainBody = bodyElement;
@@ -114,7 +114,7 @@ export default class BoardPresenter {
   }
 
   #renderBoard() {
-    render(this.#filmsComponent, this.siteMainComponent);
+    render(this.#filmsComponent, this.#siteMainComponent);
 
     if (!this.#boardMovies.length) {
       this.#renderEmptyView();
