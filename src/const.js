@@ -35,4 +35,9 @@ const SortType = {
   RATING: 'rating',
 };
 
-export { EMOTIONS, DESCRIPTIONS, POSTERS, NAMES, COMMENTS, TITLES, COUNTRIES, GENRES, AGES, FilterType, SortType };
+const ExtraType = {
+  RATING: 'Top rated',
+  COMMENT: 'Most commented',
+};
+
+export { EMOTIONS, DESCRIPTIONS, POSTERS, NAMES, COMMENTS, TITLES, COUNTRIES, GENRES, AGES, FilterType, SortType, ExtraType };

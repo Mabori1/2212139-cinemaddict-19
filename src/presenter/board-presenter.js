@@ -2,13 +2,15 @@ import BoardView from '../view/board-view.js';
 import FilmsListView from '../view/films-list-view.js';
 import FilmsContainerView from '../view/films-container-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
-import { render, remove } from '../framework/render.js';
+import { render, remove, RenderPosition } from '../framework/render.js';
 import SortView from '../view/sort-view.js';
 import EmptyView from '../view/empty-list.js';
 import CardPresenter from './card-presenter.js';
 import { updateItem } from '../utils/common.js';
-import { SortType } from '../const.js';
-import { sortDate, sortRating } from '../utils/sort.js';
+import { ExtraType, SortType } from '../const.js';
+import { sortComment, sortDate, sortRating } from '../utils/sort.js';
+import ExtraFilmView from '../view/extra-view.js';
+
 
 const MOVIE_COUNT_PER_STEP = 5;
 
@@ -24,6 +26,10 @@ export default class BoardPresenter {
   #filmsComponent = new BoardView();
   #filmsListComponent = new FilmsListView();
   #filmsContainerComponent = new FilmsContainerView();
+  #extraRatingContainerComponent = new FilmsContainerView();
+  #extraCommentContainerComponent = new FilmsContainerView();
+  #extraRatingComponent = new ExtraFilmView(ExtraType.RATING);
+  #extraCommentComponent = new ExtraFilmView(ExtraType.COMMENT);
   #sortComponent = null;
   #emptyViewComponent = new EmptyView();
   #mainBody = null;
@@ -72,7 +78,7 @@ export default class BoardPresenter {
   #renderMovies = (from, to) => {
     this.#boardMovies
       .slice(from, to)
-      .forEach((card) => this.#renderCard(card));
+      .forEach((card) => this.#renderCard(card, this.#filmsContainerComponent));
   };
 
   #sortMovies(sortType) {
@@ -106,7 +112,7 @@ export default class BoardPresenter {
     this.#sortComponent = new SortView({
       onSortTypeChange: this.#handleSortTypeChange
     });
-    render(this.#sortComponent, this.#filmsComponent.element);
+    render(this.#sortComponent, this.#filmsComponent.element, RenderPosition.AFTERBEGIN);
   };
 
   #renderEmptyView = () => {
@@ -131,10 +137,10 @@ export default class BoardPresenter {
     }
   }
 
-  #renderCard(card) {
+  #renderCard(card, container) {
 
     const cardPresenter = new CardPresenter({
-      cardFilmContainer: this.#filmsContainerComponent,
+      cardFilmContainer: container,
       mainBody: this.#mainBody,
       onDataChange: this.#handleCardChange,
       onModeChange: this.#handleModeChange
@@ -151,6 +157,24 @@ export default class BoardPresenter {
     remove(this.#loadMoreButtonComponent);
   }
 
+  #renderExtraBox() {
+    render(this.#extraRatingComponent, this.#filmsComponent.element);
+    render(this.#extraRatingContainerComponent, this.#extraRatingComponent.element);
+
+    this.#boardMovies.sort(sortRating)
+      .slice(0, 2)
+      .forEach((card) => this.#renderCard(card, this.#extraRatingContainerComponent));
+
+    render(this.#extraCommentComponent, this.#filmsComponent.element);
+    render(this.#extraCommentContainerComponent, this.#extraCommentComponent.element);
+
+    this.#boardMovies.sort(sortComment)
+      .slice(0, 2)
+      .forEach((card) => this.#renderCard(card, this.#extraCommentContainerComponent));
+
+
+  }
+
   #renderBoard() {
     render(this.#filmsComponent, this.#siteMainComponent);
 
@@ -161,6 +185,7 @@ export default class BoardPresenter {
 
     this.#renderSort();
     this.#renderMoviesList();
+    this.#renderExtraBox();
   }
 }
 

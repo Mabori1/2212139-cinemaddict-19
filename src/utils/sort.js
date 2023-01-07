@@ -6,4 +6,7 @@ const sortDate = (cardA, cardB) => dayjs(cardA.filmInfo.release.date)
 
 const sortRating = (cardA, cardB) => cardB.filmInfo.totalRating - cardA.filmInfo.totalRating;
 
-export { sortDate, sortRating };
+const sortComment = (cardA, cardB) => cardB.comments.length - cardA.comments.length;
+
+
+export { sortDate, sortRating, sortComment };

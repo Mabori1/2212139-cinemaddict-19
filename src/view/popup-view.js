@@ -1,4 +1,4 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { getCommentsMovie } from '../utils/movie.js';
 
 const commentsListView = (comments) => comments
@@ -94,7 +94,7 @@ function createPopupTemplate(movie, comments) {
 
         <section class="film-details__controls">
           <button type="button" class="film-details__control-button film-details__control-button--watchlist ${watchlist ? 'film-card__controls-item--active' : ''}" id="watchlist" name="watchlist">Add to watchlist</button>
-          <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched ${alreadyWatched ? 'film-card__controls-item--active' : ''}" id="watched" name="watched">Already watched</button>
+          <button type="button" class="film-details__control-button film-details__control-button--watched ${alreadyWatched ? 'film-card__controls-item--active' : ''}" id="watched" name="watched">Already watched</button>
           <button type="button" class="film-details__control-button film-details__control-button--favorite
           ${favorite ? 'film-card__controls-item--active' : ''}" id="favorite" name="favorite">Add to favorites</button>
         </section>
@@ -109,7 +109,7 @@ function createPopupTemplate(movie, comments) {
           ${commentsListView(commentsMovie)}
             </ul>` : ''}
 
-        <form class="film-details__new-comment" action="" method="get">
+        <form class="film-details__new-comment form" action="" method="get">
           <div class="film-details__add-emoji-label"></div>
 
           <label class="film-details__comment-label">
@@ -149,24 +149,28 @@ function createPopupTemplate(movie, comments) {
 </section>`;
 }
 
-export default class PopupView extends AbstractView {
+export default class PopupView extends AbstractStatefulView {
 
-  #movie = null;
   #comments = null;
   #handleCloseButtonClick = null;
   #handleFavoriteClick = null;
   #handleWatchListClick = null;
   #handleWatchedClick = null;
+  #handleFormSubmit = null;
 
 
-  constructor({ card, comments, onCloseButtonClick, onFavoriteClick, onWatchlistClick, onWatchedClick }) {
+  constructor({ card, comments, onCloseButtonClick, onFavoriteClick, onWatchlistClick, onWatchedClick, onFormSubmit }) {
     super();
-    this.#movie = card;
+    this._setState(PopupView.parseMovieToState(card));
     this.#comments = comments;
     this.#handleCloseButtonClick = onCloseButtonClick;
     this.#handleFavoriteClick = onFavoriteClick;
     this.#handleWatchListClick = onWatchlistClick;
     this.#handleWatchedClick = onWatchedClick;
+    this.#handleFormSubmit = onFormSubmit;
+
+    this.element.querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
 
     this.element.querySelector('.film-details__close-btn')
       .addEventListener('click', this.#popupCloseHandler);
@@ -182,8 +186,17 @@ export default class PopupView extends AbstractView {
   }
 
   get template() {
-    return createPopupTemplate(this.#movie, this.#comments);
+    return createPopupTemplate(this._state, this.#comments);
   }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit(PopupView.parseStateToMovie(this._state));
+  };
+
+  static parseMovieToState = (movie) => ({ ...movie });
+
+  static parseStateToMovie = (state) => ({ ...state });
 
   #popupCloseHandler = (evt) => {
     evt.preventDefault();
@@ -193,6 +206,7 @@ export default class PopupView extends AbstractView {
   #favoriteClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleFavoriteClick();
+    this.updateElement
   };
 
   #watchListClickHandler = (evt) => {

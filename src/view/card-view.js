@@ -1,7 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
 
-function createCardTemplate(movie) {
+const createCardTemplate = (movie) => {
 
   const { id, comments, filmInfo: { title, poster, release: { date },
     duration, genre, description, totalRating }, userDetails: { watchlist, favorite, alreadyWatched } } = movie;
@@ -49,7 +49,7 @@ function createCardTemplate(movie) {
         </div>
       </article>`
   );
-}
+};
 
 export default class CardView extends AbstractView {
 
