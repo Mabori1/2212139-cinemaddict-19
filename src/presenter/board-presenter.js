@@ -55,7 +55,7 @@ export default class BoardPresenter {
   #handleCardChange = (updatedCard) => {
     this.#boardMovies = updateItem(this.#boardMovies, updatedCard);
     this.#sourcedBoardMovies = updateItem(this.#sourcedBoardMovies, updatedCard);
-    this.#cardPresenterMap.get(updatedCard.id).init(updatedCard);
+    this.#cardPresenterMap.get(updatedCard.id).init(updatedCard, this.#boardComments);
   };
 
   #loadMoreButtonClickHandler = () => {
