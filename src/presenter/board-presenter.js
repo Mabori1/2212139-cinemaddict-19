@@ -18,7 +18,7 @@ export default class BoardPresenter {
   #siteMainComponent = null;
   #moviesModel = null;
   #commentsModel = null;
-  #boardMovies = null;
+  #boardMovies = [];
   #loadMoreButtonComponent = null;
 
   #filmsComponent = new BoardView();
@@ -30,6 +30,7 @@ export default class BoardPresenter {
   #cardPresenterMap = new Map();
   #currentSortType = SortType.DEFAULT;
   #sourcedBoardMovies = [];
+  #boardComments = [];
 
   constructor({ siteMainElement, bodyElement, moviesModel, commentsModel }) {
     this.#siteMainComponent = siteMainElement;
@@ -42,6 +43,7 @@ export default class BoardPresenter {
 
     this.#boardMovies = [...this.#moviesModel.movies];
     this.#sourcedBoardMovies = [...this.#moviesModel.movies];
+    this.#boardComments = [...this.#commentsModel.comments];
 
     this.#renderBoard();
   }
@@ -138,9 +140,7 @@ export default class BoardPresenter {
       onModeChange: this.#handleModeChange
     });
 
-    const comments = [...this.#commentsModel.comments];
-
-    cardPresenter.init(card, comments);
+    cardPresenter.init(card, this.#boardComments);
     this.#cardPresenterMap.set(card.id, cardPresenter);
   }
 

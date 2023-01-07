@@ -1,6 +1,6 @@
 import { getComment } from '../moсk/comment';
 
-const COMMENT_COUNT = 10;
+const COMMENT_COUNT = 20;
 
 export default class CommentsModel {
 

@@ -1,12 +1,35 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import { getCommentsMovie } from '../utils/movie.js';
 
-function createPopupTemplate(movie) {
+const commentsListView = (comments) => comments
+  .map((comment) =>
+    ` <li class="film-details__comment">
+          <span class="film-details__comment-emoji">
+            <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-${comment.emotion}">
+          </span>
+          <div>
+            <p class="film-details__comment-text">${comment.comment}</p>
+            <p class="film-details__comment-info">
+              <span class="film-details__comment-author">${comment.author}</span>
+              <span class="film-details__comment-day">${comment.date}</span>
+              <button class="film-details__comment-delete">Delete</button>
+            </p>
+          </div>
+        </li>`
+  ).join('');
 
-  const { filmInfo: { title, poster, director, writers, actors, duration, genre,
-    description, ageRating, totalRating,
-    release: { date, releaseCountry } }, userDetails: { favorite, watchlist, alreadyWatched } } = movie;
 
-  return `<section class="film-details">
+function createPopupTemplate(movie, comments) {
+
+  const {
+    filmInfo: { title, poster, director, writers,
+      actors, duration, genre, description, ageRating, totalRating,
+      release: { date, releaseCountry } },
+    userDetails: { favorite, watchlist, alreadyWatched } } = movie;
+  const commentsMovie = getCommentsMovie(comments, movie.comments);
+
+  return `
+<section class="film-details">
   <div class="film-details__inner">
     <div class="film-details__top-container">
       <div class="film-details__close">
@@ -69,11 +92,57 @@ function createPopupTemplate(movie) {
         </div>
       </div>
 
-      <section class="film-details__controls">
-        <button type="button" class="film-details__control-button film-details__control-button--watchlist ${watchlist ? 'film-card__controls-item--active' : ''}" id="watchlist" name="watchlist">Add to watchlist</button>
-        <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched ${alreadyWatched ? 'film-card__controls-item--active' : ''}" id="watched" name="watched">Already watched</button>
-        <button type="button" class="film-details__control-button film-details__control-button--favorite
-        ${favorite ? 'film-card__controls-item--active' : ''}" id="favorite" name="favorite">Add to favorites</button>
+        <section class="film-details__controls">
+          <button type="button" class="film-details__control-button film-details__control-button--watchlist ${watchlist ? 'film-card__controls-item--active' : ''}" id="watchlist" name="watchlist">Add to watchlist</button>
+          <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched ${alreadyWatched ? 'film-card__controls-item--active' : ''}" id="watched" name="watched">Already watched</button>
+          <button type="button" class="film-details__control-button film-details__control-button--favorite
+          ${favorite ? 'film-card__controls-item--active' : ''}" id="favorite" name="favorite">Add to favorites</button>
+        </section>
+    </div>
+
+    <div class="film-details__bottom-container">
+      <section class="film-details__comments-wrap">
+        <h3 class="film-details__comments-title">Comments <span
+          class="film-details__comments-count">${movie.comments.length}</span></h3>
+
+              ${movie.comments.length > 0 ? `<ul class="film-details__comments-list">
+          ${commentsListView(commentsMovie)}
+            </ul>` : ''}
+
+        <form class="film-details__new-comment" action="" method="get">
+          <div class="film-details__add-emoji-label"></div>
+
+          <label class="film-details__comment-label">
+            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here"
+              name="comment"></textarea>
+          </label>
+
+          <div class="film-details__emoji-list">
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile"
+              value="smile">
+            <label class="film-details__emoji-label" for="emoji-smile">
+              <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
+            </label>
+
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio"
+              id="emoji-sleeping" value="sleeping">
+            <label class="film-details__emoji-label" for="emoji-sleeping">
+              <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
+            </label>
+
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke"
+              value="puke">
+            <label class="film-details__emoji-label" for="emoji-puke">
+              <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
+            </label>
+
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry"
+              value="angry">
+            <label class="film-details__emoji-label" for="emoji-angry">
+              <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
+            </label>
+          </div>
+        </form>
       </section>
     </div>
   </div>
@@ -83,15 +152,17 @@ function createPopupTemplate(movie) {
 export default class PopupView extends AbstractView {
 
   #movie = null;
+  #comments = null;
   #handleCloseButtonClick = null;
   #handleFavoriteClick = null;
   #handleWatchListClick = null;
   #handleWatchedClick = null;
 
 
-  constructor({ card, onCloseButtonClick, onFavoriteClick, onWatchlistClick, onWatchedClick }) {
+  constructor({ card, comments, onCloseButtonClick, onFavoriteClick, onWatchlistClick, onWatchedClick }) {
     super();
     this.#movie = card;
+    this.#comments = comments;
     this.#handleCloseButtonClick = onCloseButtonClick;
     this.#handleFavoriteClick = onFavoriteClick;
     this.#handleWatchListClick = onWatchlistClick;
@@ -111,7 +182,7 @@ export default class PopupView extends AbstractView {
   }
 
   get template() {
-    return createPopupTemplate(this.#movie);
+    return createPopupTemplate(this.#movie, this.#comments);
   }
 
   #popupCloseHandler = (evt) => {

@@ -11,7 +11,7 @@ const getMovie = () => {
 
   const movie = {
     'id': nanoid(),
-    'comments': getRandomArrayNumbers(1, 4),
+    'comments': getRandomArrayNumbers(2, 8),
     'filmInfo': {
       'title': getRandomArrayElement(TITLES),
       'alternativeTitle': getRandomArrayElement(TITLES),

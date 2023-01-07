@@ -12,6 +12,7 @@ export default class CardPresenter {
   #cardFilmContainer = null;
   #mainBody = null;
   #card = null;
+  #comments = null;
   #cardComponent = null;
   #popupComponent = null;
   #handleDataChange = null;
@@ -33,9 +34,10 @@ export default class CardPresenter {
     }
   };
 
-  init(card) {
+  init(card, comments) {
 
     this.#card = card;
+    this.#comments = comments;
     const prevCardComponent = this.#cardComponent;
     const prevPopupComponent = this.#popupComponent;
 
@@ -50,6 +52,7 @@ export default class CardPresenter {
 
     this.#popupComponent = new PopupView({
       card: this.#card,
+      comments: this.#comments,
       onCloseButtonClick: this.#handleCloseButtonClick,
       onFavoriteClick: this.#handleFavoriteClick,
       onWatchlistClick: this.#handleWatchlistClick,
