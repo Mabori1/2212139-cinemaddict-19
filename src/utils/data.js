@@ -7,9 +7,8 @@ const DATE_FORMAT = 'D MMMM';
 
 
 const getRandomDate = () => dayjs()
-  .add(getRandomInteger(-2, -20), 'year')
-  .add(getRandomInteger(-1, -30), 'day')
-  .add(getRandomInteger(-1, -23), 'hour').format('YYYY');
+  .add(getRandomInteger(-2, -20), 'year').format('YYYY');
+
 
 const getRandomDateComment = () => dayjs()
   .add(getRandomInteger(-2, -20), 'year')

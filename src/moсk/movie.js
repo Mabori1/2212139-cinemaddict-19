@@ -26,7 +26,7 @@ const getMovie = () => {
         'releaseCountry': getRandomArrayElement(COUNTRIES)
       },
       'duration': getDurationTime(),
-      'genre': getRandomArrayElement(GENRES),
+      'genre': GENRES.slice(1, getRandomInteger(1, 4)),
       'description': getRandomArrayElement(DESCRIPTIONS)
     },
     'userDetails': {

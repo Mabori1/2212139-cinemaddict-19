@@ -18,15 +18,131 @@ const commentsListView = (comments) => comments
         </li>`
   ).join('');
 
+const createPosterTemplate = (poster) => (
+  `${poster?.length ? `<img class="film-details__poster-img" src="${poster}" alt="">` : ''}`
+);
 
-function createPopupTemplate(movie, comments) {
+const createTotalRatingTemplate = (totalRating) => (
+  `${totalRating ? `<div class="film-details__rating">
+    <p class="film-details__total-rating">${totalRating}</p>
+  </div>` : ''}`
+);
+
+const createTitleTemplate = (title) => (
+  `${title?.length
+    ? `<h3 class="film-details__title">${title}</h3>`
+    : ''}`
+);
+
+const createAlternativeTitleTemplate = (alternativeTitle) => (
+  `${alternativeTitle?.length
+    ? `<p class="film-details__title-original">Original: ${alternativeTitle}</p>`
+    : ''}`
+);
+
+const createDirectorTemplate = (director) => (
+  `${director?.length
+    ? `<tr class="film-details__row">
+          <td class="film-details__term">Director</td>
+          <td class="film-details__cell">${director}</td>
+        </tr>`
+    : ''}`
+);
+
+const createWritersTemplate = (writers) => (
+  `${writers?.length
+    ? `<tr class="film-details__row">
+            <td class="film-details__term">${writers.length > 1 ? 'Writers' : 'Writer'}</td>
+            <td class="film-details__cell">${writers.join(', ')}</td>
+          </tr>`
+    : ''}`
+);
+
+const createActorsTemplate = (actors) => (
+  `${actors?.length
+    ? `<tr class="film-details__row">
+            <td class="film-details__term">${actors.length > 1 ? 'Actors' : 'Actor'}</td>
+            <td class="film-details__cell">${actors.join(', ')}</td>
+          </tr>`
+    : ''}`
+);
+
+const createReleaseDateTemplate = (release) => (
+  `${release.date?.length
+    ? `<tr class="film-details__row">
+            <td class="film-details__term">Release Date</td>
+            <td class="film-details__cell">${release.date}</td>
+        </tr>`
+    : ''}`
+);
+
+const createRuntimeTemplate = (duration) => (
+  `${duration
+    ? `<tr class="film-details__row">
+            <td class="film-details__term">Runtime</td>
+            <td class="film-details__cell">
+              ${duration}
+            </td>
+        </tr>`
+    : ''}`
+);
+
+const createGenresTemplate = (genres) => (
+  `${genres?.length
+    ? `<tr class="film-details__row">
+          <td class="film-details__term">${genres.length > 1 ? 'Genres' : 'Genre'}</td>
+          <td class="film-details__cell">
+            ${genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('')}
+        </tr>`
+    : ''}`
+);
+
+const createCountryTemplate = (release) => (
+  `${release.releaseCountry?.length
+    ? `<tr class="film-details__row">
+          <td class="film-details__term">Country</td>
+          <td class="film-details__cell">${release.releaseCountry}</td>
+        </tr>`
+    : ''}`
+);
+
+const createDescriptionTemplate = (description) => (
+  `${description?.length
+    ? `<p class="film-details__film-description">${description}</p>`
+    : ''}`
+);
+
+const createAgeRatingTemplate = (ageRating) => (
+  `${ageRating !== null
+    ? `<p class="film-details__age">${ageRating}</p>`
+    : ''}`
+);
+
+
+const createPopupTemplate = (movie, comments) => {
 
   const {
     filmInfo: { title, poster, director, writers,
       actors, duration, genre, description, ageRating, totalRating,
-      release: { date, releaseCountry } },
+      alternativeTitle, release },
     userDetails: { favorite, watchlist, alreadyWatched } } = movie;
+
   const commentsMovie = getCommentsMovie(comments, movie.comments);
+
+  const posterTemplate = createPosterTemplate(poster);
+  const totalRatingTemplate = createTotalRatingTemplate(totalRating);
+  const titleTemplate = createTitleTemplate(title);
+  const alternativeTitleTemplate = createAlternativeTitleTemplate(alternativeTitle);
+  const directorTemplate = createDirectorTemplate(director);
+  const writersTemplate = createWritersTemplate(writers);
+  const actorsTemplate = createActorsTemplate(actors);
+  const releaseDateTemplate = createReleaseDateTemplate(release);
+  const runtimeTemplate = createRuntimeTemplate(duration);
+  const countryTemplate = createCountryTemplate(release);
+  const genresTemplate = createGenresTemplate(genre);
+  const descriptionTemplate = createDescriptionTemplate(description);
+  const ageRatingTemplate = createAgeRatingTemplate(ageRating);
+
 
   return `
 <section class="film-details">
@@ -37,66 +153,44 @@ function createPopupTemplate(movie, comments) {
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src=${poster} alt="">
-
-          <p class="film-details__age">${ageRating}</p>
+          ${posterTemplate}
+          ${ageRatingTemplate}
         </div>
 
         <div class="film-details__info">
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
-              <h3 class="film-details__title">${title}</h3>
-              <p class="film-details__title-original">Original: ${title}</p>
+              ${titleTemplate}
+              ${alternativeTitleTemplate}
             </div>
-
-            <div class="film-details__rating">
-              <p class="film-details__total-rating">${totalRating}</p>
-            </div>
+            ${totalRatingTemplate}
           </div>
 
           <table class="film-details__table">
-            <tr class="film-details__row">
-              <td class="film-details__term">Director</td>
-              <td class="film-details__cell">${director}</td>
-            </tr>
-            <tr class="film-details__row">
-              <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">${writers}</td>
-            </tr>
-            <tr class="film-details__row">
-              <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">${actors}</td>
-            </tr>
-            <tr class="film-details__row">
-              <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${date}</td>
-            </tr>
-            <tr class="film-details__row">
-              <td class="film-details__term">Duration</td>
-              <td class="film-details__cell">${duration}</td>
-            </tr>
-            <tr class="film-details__row">
-              <td class="film-details__term">Country</td>
-              <td class="film-details__cell">${releaseCountry}</td>
-            </tr>
-            <tr class="film-details__row">
-              <td class="film-details__term">Genres</td>
-              <td class="film-details__cell">
-                <span class="film-details__genre">${genre}</span>
-                <span class="film-details__genre">Film-Noir</span>
-                <span class="film-details__genre">Mystery</span></td>
-            </tr>
+          ${directorTemplate}
+          ${writersTemplate}
+          ${actorsTemplate}
+          ${releaseDateTemplate}
+          ${runtimeTemplate}
+          ${countryTemplate}
+          ${genresTemplate}
           </table>
 
-          <p class="film-details__film-description">${description}</p>
+          ${descriptionTemplate}
+
         </div>
       </div>
 
         <section class="film-details__controls">
-          <button type="button" class="film-details__control-button film-details__control-button--watchlist ${watchlist ? 'film-card__controls-item--active' : ''}" id="watchlist" name="watchlist">Add to watchlist</button>
-          <button type="button" class="film-details__control-button film-details__control-button--watched ${alreadyWatched ? 'film-card__controls-item--active' : ''}" id="watched" name="watched">Already watched</button>
+          <button type="button" class="film-details__control-button film-details__control-button--watchlist ${watchlist ? 'film-card__controls-item--active' : ''}" id="watchlist" name="watchlist">
+          ${watchlist ? 'Added' : 'Add'} to watchlist
+          </button>
+          <button type="button" class="film-details__control-button film-details__control-button--watched ${alreadyWatched ? 'film-card__controls-item--active' : ''}" id="watched" name="watched">
+          ${alreadyWatched ? 'Already watched' : 'Not Viewed'}</button>
           <button type="button" class="film-details__control-button film-details__control-button--favorite
-          ${favorite ? 'film-card__controls-item--active' : ''}" id="favorite" name="favorite">Add to favorites</button>
+          ${favorite ? 'film-card__controls-item--active' : ''}" id="favorite" name="favorite">
+          ${favorite ? 'Added' : 'Add'} to favorites
+          </button>
         </section>
     </div>
 
@@ -147,7 +241,7 @@ function createPopupTemplate(movie, comments) {
     </div>
   </div>
 </section>`;
-}
+};
 
 export default class PopupView extends AbstractStatefulView {
 
@@ -206,7 +300,6 @@ export default class PopupView extends AbstractStatefulView {
   #favoriteClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleFavoriteClick();
-    this.updateElement
   };
 
   #watchListClickHandler = (evt) => {
